@@ -1,0 +1,8 @@
+{
+    "name": "Survey",
+    "version": "0.0.1",
+    "description": "An example survey with various questions for nodegame users. ",
+    "author": " <>",
+    "license": "MIT/X11",
+    "homepage": "http://nodegame.org"
+}

@@ -1,0 +1,13 @@
+npm-debug.log
+\#*\#
+.\#*
+.settings
+.project
+*~
+_*
+node_modules
+
+*.geany
+*.swp
+Session.vim
+private
