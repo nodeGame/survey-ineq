@@ -1,9 +1,8 @@
 # Survey
- <>
 
-## Description
+A simple survey with focus on inequality.
 
-An example survey with various questions for nodegame users. 
+_More questions to be added._
 
 ## License
 

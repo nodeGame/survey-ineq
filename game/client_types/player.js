@@ -19,15 +19,13 @@ const J = ngc.JSUS;
 module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
 
-
     // Define a function for future use.
-
     function capitalizeInput(input) {
-    var str;
-    str = input.value;
-    str = str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
-    input.value = str;
-  }
+        var str;
+        str = input.value;
+        str = str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+        input.value = str;
+    }
 
     // Make the player step through the steps without waiting for other players.
     stager.setDefaultStepRule(ngc.stepRules.SOLO);
@@ -48,7 +46,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         this.visualTimer = node.widgets.append('VisualTimer', header, {
             hidden: true // Initially hidden.
         });
-        this.doneButton = node.widgets.append('DoneButton', header);
+
+        this.doneButton = node.widgets.append('DoneButton', header, {
+            text: 'Next'
+        });
 
         // No need to show the wait for other players screen in single-player
         // games.

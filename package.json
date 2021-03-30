@@ -1,8 +1,13 @@
 {
-    "name": "Survey",
+    "name": "survey",
     "version": "0.0.1",
-    "description": "An example survey with various questions for nodegame users. ",
+    "description": "A simple survey with . ",
     "author": " <>",
     "license": "MIT/X11",
-    "homepage": "http://nodegame.org"
+    "homepage": "http://nodegame.org",
+    "card": {
+      "description": "A simple survey with focus on inequality",
+      "url": "https://github.com/nodegame/survey",
+      "icon": "content_paste"
+    }
 }
