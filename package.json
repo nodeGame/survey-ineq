@@ -1,8 +1,8 @@
 {
     "name": "survey",
     "version": "0.0.1",
-    "description": "A simple survey with . ",
-    "author": " <>",
+    "description": "A simple survey with focus on inequality.",
+    "author": "Stefano Balietti <ste@nodegame.org>",
     "license": "MIT/X11",
     "homepage": "http://nodegame.org",
     "card": {
