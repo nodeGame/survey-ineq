@@ -1,6 +1,6 @@
 /**
  * # Game setup
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * This file includes settings that are shared amongst all client types

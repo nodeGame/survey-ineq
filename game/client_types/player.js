@@ -1,6 +1,5 @@
 /**
  * # Player type implementation of the game stages
- * 
  * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *

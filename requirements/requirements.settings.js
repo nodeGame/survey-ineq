@@ -1,6 +1,6 @@
 /**
  * # Requirements settings
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Requirements settings file.

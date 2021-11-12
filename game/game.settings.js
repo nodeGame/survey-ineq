@@ -1,6 +1,6 @@
 /**
  * # Game settings definition file
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * The variables in this file will be sent to each client and saved under:

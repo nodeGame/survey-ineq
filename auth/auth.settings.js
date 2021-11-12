@@ -1,6 +1,6 @@
 /**
  * # Authorization settings
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * http://www.nodegame.org

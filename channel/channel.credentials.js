@@ -1,6 +1,6 @@
 /**
  * # Channel secret file
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * The file must return the administrator user name and password

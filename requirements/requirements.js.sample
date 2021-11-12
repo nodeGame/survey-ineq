@@ -1,6 +1,6 @@
 /**
  * # Requirements functions
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Processes the settings and sets the requirements for accessing the channel.

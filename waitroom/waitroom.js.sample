@@ -1,6 +1,6 @@
 /**
  * # Waiting Room
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Handles incoming connections, setups each client,

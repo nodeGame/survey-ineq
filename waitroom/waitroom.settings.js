@@ -1,6 +1,6 @@
 /**
  * # Waiting Room settings
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Waiting Room settings.

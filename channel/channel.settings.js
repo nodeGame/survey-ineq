@@ -1,6 +1,6 @@
 /**
  * # Channel settings
- * Copyright(c) 2021  <>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * The channel is divided into two internal servers: player and admin.
