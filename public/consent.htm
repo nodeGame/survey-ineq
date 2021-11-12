@@ -1,0 +1,125 @@
+<!doctype html>
+<link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css" />
+<link rel='stylesheet' href='/stylesheets/nodegame.css'></link>
+<link rel='stylesheet' href='css/style.css'></link>
+<style>
+  #consent h3 { color: darkorange; }
+  p { margin-bottom: 25px; }
+</style>
+<title>Consent</title>
+<body>
+  <div id="container">
+    <div id="notAgreed" style="display: none; margin-top: 30px; font-size: 24px;">
+      <p>
+        You have chosen to <strong>not participate</strong> in this study,
+        therefore you have been disconnected and you can now return the task.
+      </p>
+
+      <p>
+        Thank you for your interest, we hope to have you as a participant in our
+        future studies.
+      </p>
+      
+      <button class="btn" id="show-consent">Show Consent Form</button>
+    </div>
+    <div id="consent">
+
+      <h3 style="text-align: center;">Informed Consent Agreement</h3>
+
+      <p>
+         <strong>Study Title:</strong>
+         <span id="exp-title"></span>
+      </p>
+
+      <p>
+         <strong>Please read this consent agreement carefully before you decide
+         to participate in the study.</strong>
+      </p>
+
+      <p>
+         <strong>Purpose of the research study:</strong>
+         <span id="exp-purpose"></span>
+      </p>
+
+      <p>
+         <strong>What you will do in the study:</strong> 
+         <span id="exp-descr"></span>
+         <br/>
+         If you become uncomfortable at any point, you may quit the survey.
+      </p>
+
+      <p>
+         <strong>Time required:</strong> The study will require about
+         <em><span id="exp-time"></span> minutes</em> of your time.
+      </p>
+
+      <p>
+         <strong>Risks:</strong>
+         <span id="exp-risks">There are no anticipated risks in this study.</span>
+      </p>
+
+      <p>
+         <strong>Benefits:</strong>
+         <span id="exp-benefits">There are no direct benefits to you for
+          participating in this research study.</span>
+         <br/>
+      </p>
+
+      <p>
+         <strong>Confidentiality:</strong>
+         The information that you give in the study will be handled confidentially.
+         You will have the option of providing your email to be contacted
+         in case of a followup study, but it will not be linked to your survey
+         responses. No other information that could be used to identify
+         you will be collected or linked to the data.
+      </p>
+
+      <p>
+         <strong>Voluntary participation:</strong>
+         Your participation in the study is completely voluntary.
+      </p>
+
+      <p>
+         <strong>Right to withdraw from the study:</strong> You have the right to
+         withdraw from the study at any time without penalty. Because the data
+         are not connected to your identity, you cannot withdraw after you submit
+         your data.
+      </p>
+
+      <p>
+        <strong>How to withdraw from the study:</strong> If you want to withdraw
+        from the study, you may close your internet browser. There is no penalty
+        for withdrawing, but you will not receive the payment for the study.
+      </p>
+
+      <p>
+        <strong>Payment:</strong> You will receive a payment of
+        <em><span id="exp-money"></span></em> for participating in the study.
+      </p>
+
+      <p>
+        <strong>Using data beyond this study:</strong>
+        <span id="exp-secondary-use">The researcher would like to make the information collected in this study
+        available to other researchers after the study is completed. The researcher
+        will remove any identifying information (such as your name,
+        contact information, etc.) connected to the information you provide.
+        Examples of other studies include meta-analyses of similar studies that
+        aggregate information from multiple participants from a broad range of
+        studies. Researchers of future studies will not ask your permission for
+        each new study and will not have access to your name and other information
+        that could potentially identify you, nor will they attempt to do so.
+      </span>
+      </p>
+
+      <p>
+        <strong>If you have questions about the study, contact:</strong>
+        <br/>
+        Someone <br/>
+        School of Social Sciences<br/>
+        University of Somewhere<br/>
+        Somewheresville<br/> 
+        Telephone: 123 456 789<br/> 
+        <a href="mailto:someone@not.a.real.address">someone@not.a.real.address</a>
+      </p>
+    </div>
+</body>

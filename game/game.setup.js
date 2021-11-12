@@ -11,16 +11,32 @@
  * http://www.nodegame.org
  * ---
  */
-module.exports = function(settings, stages) {
 
-    var setup;
-    setup = {};
+// Some imports, often used in setup.
+const path = require('path');
+const NDDB = require('NDDB');
+const J = require('JSUS').JSUS;
 
-    setup.debug = true;
+module.exports = function (settings, stages, dir, level) {
 
+    let setup = {};
+
+    // ## verbosity
+    // Changes the quantity of output to console in the browser and Node.JS
     // setup.verbosity = 1;
 
+    // ## debug
+    // Changes the behavior of nodeGame in relation to errors in the browser
+    // and Node.JS. If TRUE, errors are thrown and displayed.
+    setup.debug = true;
+
+    // ## window
+    // Changes the appereance and some of the features in the browser.
     setup.window = {
+
+        // ### promptOnleave
+        // If TRUE, a popup window will ask users whether they want to
+        // leave the page.
         promptOnleave: !setup.debug
     };
 

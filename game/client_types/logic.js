@@ -1,6 +1,7 @@
 /**
  * # Logic type implementation of the game stages
- * Copyright(c) 2021  <>
+ * 
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * http://www.nodegame.org
@@ -26,15 +27,26 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     stager.setOnInit(function() {
 
         // Feedback.
-        memory.view('feedback').save('feedback.csv', {
-            header: [ 'time', 'timestamp', 'player', 'feedback' ],
-            keepUpdated: true
+        memory.view('feedback').stream({
+            format: 'csv',
+            header: [ 'time', 'timestamp', 'player', 'feedback' ]
         });
 
         // Email.
-        memory.view('email').save('email.csv', {
-            header: [ 'timestamp', 'player', 'email' ],
-            keepUpdated: true
+        memory.view('email').stream({
+            format: 'csv',
+            header: [ 'timestamp', 'player', 'email' ]
+        });
+
+        // Times.
+        memory.stream({
+            filename: 'times.csv',
+            format: 'csv',
+            delay: 20000,
+            header: [
+                'session', 'treatment', 'player', 'stage', 'step', 'round', 'stageId', 'stepId', 'timestamp', 'time'
+            ],
+            stageNum2Id: false // TODO: this should be default FALSE
         });
 
 
@@ -42,6 +54,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
           let client = channel.registry.getClient(msg.from);
           if (!client) return;
+
           if (client.checkout) {
             // Just resend bonus
             gameRoom.computeBonus({
@@ -51,10 +64,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
           }
           else {
 
-            // Coins for the questions.
-            gameRoom.updateWin(msg.from, (settings.COINS), {
-                clear: true
-            });
+            // Adding extra coins (as an example).
+            gameRoom.updateWin(msg.from, settings.COINS);
 
             // Compute total win.
             gameRoom.computeBonus({
@@ -63,15 +74,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             // Mark client checked out.
             channel.registry.checkOut(msg.from);
-
-            // Select all 'done' items and save its time.
-            memory.select('done').save('times.csv', {
-                header: [
-                    'session', 'player', 'stage', 'step', 'round',
-                    'time', 'timeup'
-                    ],
-                    append: true
-            });
 
             // Select all 'done' items and save everything as json.
             memory.select('done').save('memory_all.json');
