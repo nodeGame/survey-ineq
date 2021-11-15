@@ -13,10 +13,4 @@ module.exports = function(treatmentName, settings, stager,
     stager.setDefaultCallback(function() {
         node.timer.random.done();
     });
-
-    stager.extendStep('game', {
-        cb: () => {
-            node.timer.random.done({ greater: Math.random() > 0.5 });
-        }
-    });
 };
