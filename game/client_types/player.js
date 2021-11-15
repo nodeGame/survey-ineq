@@ -124,7 +124,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             w = node.widgets.lastAppended.formsById.othergender;
                             if ((value === 2) && !removed) w.show();
                             else w.hide();
-                            // Necessary when the page changed size after 
+                            // Necessary when the page changed size after
                             // loading it
                             W.adjustFrameHeight();
                         },
@@ -485,9 +485,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             'Nancy Pelosi',
                             'Mitch McConnell',
                             'Chuck Schumer',
-                            'Paul Ryan'
+                            'Paul Ryan',
+                            'I don\'t know'
                         ],
-                        correctChoice: 0
+                        // correctChoice: 0
                     },
                     {
                         id: 'houseTerm',
@@ -497,9 +498,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             '2 years',
                             '4 years',
                             '6 years',
-                            '8 years'
+                            '8 years',
+                            'I don\'t know'
                         ],
-                        correctChoice: 0
+                        // correctChoice: 0
                     },
                     {
                         id: 'senateTerm',
@@ -509,9 +511,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             '2 years',
                             '4 years',
                             '6 years',
-                            '8 years'
+                            '8 years',
+                            'I don\'t know'
                         ],
-                        correctChoice: 2
+                        // correctChoice: 2
                     },
                     {
                         id: 'medicare',
@@ -524,9 +527,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             'A program run by the US federal government to pay' +
                             ' for old people’s health care',
                             'A private, non-profit organization' +
-                            ' that runs free health clinics'
+                            ' that runs free health clinics',
+                            'I don\'t know'
                         ],
-                        correctChoice: 2
+                        // correctChoice: 2
                     },
                     {
                         id: 'veto',
@@ -537,9 +541,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             'One-half',
                             'Two-thirds',
                             'Three-fourths',
-                            'Three-fifths'
+                            'Three-fifths',
+                            'I don\'t know'
                         ],
-                        correctChoice: 1
+                        // correctChoice: 1
                     },
                     {
                         id: 'minWage',
@@ -548,9 +553,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             '$5.25',
                             '$7.25',
                             '$10.50',
-                            '$12.50'
+                            '$12.50',
+                            'I don\'t know'
                         ],
-                        correctChoice: 1
+                        // correctChoice: 1
                     },
                     {
                         id: 'infRate',
@@ -560,9 +566,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             '1%',
                             '6%',
                             '10%',
-                            '15%'
+                            '15%',
+                            'I don\'t know'
                         ],
-                        correctChoice: 1
+                        // correctChoice: 1
                     },
                     {
                         id: 'primeMinister',
@@ -571,9 +578,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                             'Scott Morrison',
                             'Justin Trudeau',
                             'Angela Merkel',
-                            'Boris Johnson'
+                            'Boris Johnson',
+                            'I don\'t know'
                         ],
-                        correctChoice: 3
+                        // correctChoice: 3
                     },
 
                 ],
