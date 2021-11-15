@@ -91,7 +91,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('instructions', {
         // Do not go back to consent.
         backbutton: false,
-        frame: 'instructions.htm',
+        // No need to specify the frame, if named after the step id.
+        // frame: 'instructions.htm',
         cb: function () {
             var s;
             // Note: we need to specify node.game.settings,
