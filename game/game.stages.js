@@ -12,8 +12,8 @@
 module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
      stager
-        .next('consent')
-        .next('instructions')
+     .next('instructions')
+     .next('consent')
         .next('survey-demo1')
         .next('survey-demo2')
         .next('survey-finance')
@@ -27,7 +27,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     // Notice: here all stages have one step named after the stage.
 
     // Skip one stage.
-    // stager.skip('instructions');
+    stager.skip('instructions');
 
     // Skip multiple stages:
     // stager.skip([ 'instructions', 'quiz' ])

@@ -1,6 +1,6 @@
 /**
  * # Player type implementation of the game stages
- * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Each client type must extend / implement the stages defined in `game.stages`.
@@ -17,6 +17,63 @@ const ngc = require('nodegame-client');
 const J = ngc.JSUS;
 
 module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
+
+
+    const formOptions = {
+        orientation: 'V',
+        onclick: function(value, removed, td) {
+            var res, f;
+            if (!removed) {
+                f = node.widgets.last.getVisibleForms()[0];
+                // Autoplay has f undefined.
+                // Some widgets (e.g., Dropdown) do not have isChoiceDone,
+                // they should
+                if (f && f.isChoiceDone && !f.isChoiceDone(true)) return;
+                res = node.widgets.last.next();
+                if (res === false) node.done();
+            }
+        },
+        onchange: function() {
+            setTimeout(function() {
+                var res;
+                res = node.widgets.last.next();
+                if (res === false) node.done();
+            }, 400);
+        }
+    };
+
+
+    const footerCb = function(footer) {
+        var str;
+        str = node.game.globals.optional;
+        str += '<br><div class="progress">';
+        str += '<div id="form-progress" class="progress-bar" role="progressbar" style="width:' +
+        (1 / this.forms.length)*100 + '%"></div></div>';
+        footer.innerHTML += str;
+    };
+
+    const initProgressCb = function() {
+        node.on('WIDGET_NEXT', function() {
+            W.gid('form-progress').style.width = ((node.widgets.last.oneByOneCounter+1) / node.widgets.last.forms.length)*100 + '%';
+        });
+        node.on('WIDGET_PREV', function() {
+            W.gid('form-progress').style.width = ((node.widgets.last.oneByOneCounter+1) / node.widgets.last.forms.length)*100 + '%';
+        });
+    };
+
+    // Make the player step through the steps without waiting for other players.
+    stager.setDefaultStepRule(ngc.stepRules.SOLO);
+
+
+
+    stager.setDefaultGlobals({
+        next: 'Next',
+        back: 'Back',
+        correct: "Correct",
+        notRight: "Not Right",
+        answer: "Answer",
+        monthSurveyStart: "1/1/2023"
+    });
 
     // Define a function for future use.
     function capitalizeInput(input) {
@@ -109,88 +166,107 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         // Make a widget step.
         widget: {
             name: 'ChoiceManager',
-            options: {
-                id: 'demo1',
-                mainText: 'Your demographics.',
-                simplify: true,
-                forms: [
-                    {
-                        id: 'gender',
-                        mainText: 'What is your gender?',
-                        choices: ['Male', 'Female', 'Other'],
-                        shuffleChoices: false,
-                        onclick: function (value, removed) {
-                            var w;
-                            // Display Other.
-                            w = node.widgets.lastAppended.formsById.othergender;
-                            if ((value === 2) && !removed) w.show();
-                            else w.hide();
-                            // Necessary when the page changed size after
-                            // loading it
-                            W.adjustFrameHeight();
-                        },
-                        preprocess: capitalizeInput
+            
+            id: 'demo1',
+            
+            mainText: 'Your demographics.',
+            
+            simplify: true,
+            
+            oneByOne: true,
+            
+            doneBtn: "Next",
+            
+            backBtn: "Back",
+            
+            footer: footerCb,
+            
+            panel: false,
+
+            honeypot: {
+                forms:[
+                    { id: 'colorblind', label: 'Are you color blind?',
+                    placeholder: 'Write yes/no' },
+                    { id: 'favoritetown', label: 'What is your favorite town?',
+                    placeholder: 'Type your favorite town' }
+                ]
+            },
+
+            forms: [
+                {
+                    id: 'gender',
+                    mainText: 'What is your mother\'s name?',
+                    choices: ['Anna', 'Carla', 'Other'],
+                    shuffleChoices: false,
+                    onclick: function (value, removed) {
+                        var w;
+                        // Display Other.
+                        w = node.widgets.lastAppended.formsById.othergender;
+                        if ((value === 2) && !removed) w.show();
+                        else w.hide();
+                        // Necessary when the page changed size after
+                        // loading it
+                        W.adjustFrameHeight();
                     },
-                    {
-                        name: 'CustomInput',
-                        id: 'othergender',
-                        mainText: 'Please name your gender.',
-                        width: '95%',
-                        hidden: true
-                    },
-                    {
-                        name: 'CustomInput',
-                        id: 'age',
-                        mainText: 'What is your age?',
-                        type: 'int',
-                        min: 18,
-                        // requiredChoice: false
-                    },
-                    {
-                        id: 'race',
-                        selectMultiple: true,
-                        mainText: 'Do you identify with any ' +
-                            'of the following races/ethnic groups?',
-                        choices: ['White', 'African American',
-                            'Latino', 'Asian',
-                            'American Indian',
-                            'Alaska Native',
-                            'Native Hawaiian', 'Pacific Islander']
-                    },
-                    {
-                        name: 'CustomInput',
-                        id: 'othereyes',
-                        mainText: 'Please say the color of your eyes.',
-                        width: '95%',
-                        hint: '(If more than one color, order alphabetically ' +
-                            'and unite with a dash)',
-                        preprocess: capitalizeInput
-                    },
-                    {
-                        name: 'CustomInput',
-                        id: 'language',
-                        mainText: 'What is your first language?',
-                        preprocess: capitalizeInput,
-                        width: '95%',
-                    },
-                    {
-                        name: 'CustomInput',
-                        id: 'otherlanguage',
-                        mainText: 'Do you speak other languages? If Yes, ' +
-                            'list them here, otherwise leave empty.',
-                        type: 'list',
-                        hint: '(if <em>English</em> is not your first ' +
-                            'language, list it first; if you speak more ' +
-                            'than one language, separate them with comma)',
-                        width: '95%',
-                        requiredChoice: false
-                    },
-                ],
-                formsOptions: {
-                    requiredChoice: true,
-                    shuffleChoices: true
+                    preprocess: capitalizeInput
                 },
-                className: 'centered'
+                {
+                    name: 'CustomInput',
+                    id: 'othergender',
+                    mainText: 'Please name your gender.',
+                    width: '95%',
+                    hidden: true
+                },
+                {
+                    name: 'CustomInput',
+                    id: 'age',
+                    mainText: 'What is your age?',
+                    type: 'int',
+                    min: 18,
+                },
+                {
+                    id: 'race',
+                    selectMultiple: true,
+                    mainText: 'Do you identify with any ' +
+                        'of the following races/ethnic groups?',
+                    choices: ['White', 'African American',
+                        'Latino', 'Asian',
+                        'American Indian',
+                        'Alaska Native',
+                        'Native Hawaiian', 'Pacific Islander']
+                },
+                {
+                    name: 'CustomInput',
+                    id: 'othereyes',
+                    mainText: 'Please say the color of your eyes.',
+                    width: '95%',
+                    hint: '(If more than one color, order alphabetically ' +
+                        'and unite with a dash)',
+                    preprocess: capitalizeInput
+                },
+                {
+                    name: 'CustomInput',
+                    id: 'language',
+                    mainText: 'What is your first language?',
+                    preprocess: capitalizeInput,
+                    width: '95%',
+                },
+                {
+                    name: 'CustomInput',
+                    id: 'otherlanguage',
+                    mainText: 'Do you speak other languages? If Yes, ' +
+                        'list them here, otherwise leave empty.',
+                    type: 'list',
+                    hint: '(if <em>English</em> is not your first ' +
+                        'language, list it first; if you speak more ' +
+                        'than one language, separate them with comma)',
+                    width: '95%',
+                    requiredChoice: false
+                },
+            ],
+            formsOptions: {
+                requiredChoice: true,
+                shuffleChoices: true
             }
         }
     });

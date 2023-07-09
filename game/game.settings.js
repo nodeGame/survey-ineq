@@ -1,6 +1,6 @@
 /**
  * # Game settings definition file
- * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * The variables in this file will be sent to each client and saved under:
@@ -24,18 +24,6 @@ module.exports = {
     // #nodeGame properties:
 
     /**
-     * ### TIMER (object) [nodegame-property]
-     *
-     * Maps the names of the steps of the game to timer durations
-     *
-     * If a step name is found here, then the value of the property is
-     * used to initialize the game timer for the step.
-     */
-    //TIMER: {
-
-    //},
-
-    /**
      * ### CONSENT (object) [nodegame-property]
      *
      * Contains info to be added to the page by the Consent widget
@@ -56,13 +44,11 @@ module.exports = {
 
       BASE_PAY: basePay,
 
+    
     // # Game specific properties
 
     // Number of coins available each round.
     COINS: 1,
-
-    // Exchange rate coins to dollars.
-    //EXCHANGE_RATE: 1,
 
     // # Treatments definition.
 
