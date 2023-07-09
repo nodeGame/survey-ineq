@@ -28,6 +28,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
     // Skip one stage.
     stager.skip('instructions');
+    stager.skip('consent');
 
     // Skip multiple stages:
     // stager.skip([ 'instructions', 'quiz' ])
