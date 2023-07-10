@@ -9,31 +9,35 @@
  * ---
  */
 
-module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
+module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
+    stager
+        
+        .stage("instructions")
+        
+        .stage("consent")
 
-     stager
-     .next('instructions')
-     .next('consent')
-        .next('survey-demo1')
-        .next('survey-demo2')
-        .next('survey-finance')
-        .next('survey-inequality')
-        .next('survey-politics')
-        .next('sdo')
-        .next('group_malleability')
-        .next('end')
-        .gameover();
-
+        .stage("survey")
+            .step("survey-demo1")
+            .step("survey-demo2")
+            .step("survey-finance")
+            .step("survey-inequality")
+            .step("survey-politics")
+        
+        .next("sdo")
+        
+        .next("group_malleability")
+        
+        .next("end")
+        
     // Notice: here all stages have one step named after the stage.
 
     // Skip one stage.
-    stager.skip('instructions');
-    stager.skip('consent');
+    stager.skip("instructions");
+    stager.skip("consent");
 
     // Skip multiple stages:
     // stager.skip([ 'instructions', 'quiz' ])
 
     // Skip a step within a stage:
     // stager.skip('stageName', 'stepName');
-
 };

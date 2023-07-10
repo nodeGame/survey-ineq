@@ -18,32 +18,10 @@ const J = ngc.JSUS;
 
 module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
 
-    const formOptions = {
-        orientation: 'V',
-        onclick: function(value, removed, td) {
-            var res, f;
-            if (!removed) {
-                f = node.widgets.last.getVisibleForms()[0];
-                // Autoplay has f undefined.
-                // Some widgets (e.g., Dropdown) do not have isChoiceDone,
-                // they should
-                if (f && f.isChoiceDone && !f.isChoiceDone(true)) return;
-                res = node.widgets.last.next();
-                if (res === false) node.done();
-            }
-        },
-        onchange: function() {
-            setTimeout(function() {
-                var res;
-                res = node.widgets.last.next();
-                if (res === false) node.done();
-            }, 400);
-        }
-    };
 
     const footerCb = function(footer) {
         var str;
-        str = node.game.globals.optional;
+        str = 'All questions are optional.';
         str += '<br><div class="progress">';
         str += '<div id="form-progress" class="progress-bar" '
         str += 'role="progressbar" style="width:' +
@@ -83,17 +61,10 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
 
         // Initialize the client.
 
-        var header;
-
-        // Setup page: header + frame.
-        header = W.generateHeader();
+        // Setup page: frame only.
         W.generateFrame();
 
-        // Add widgets.
-        this.visuaStage = node.widgets.append('VisualStage', header);
-        this.visualRound = node.widgets.append('VisualRound', header);
-
-        this.discBox = node.widgets.append('DisconnectBox', header, {
+        this.discBox = node.widgets.append('DisconnectBox', document.body, {
             disconnectCb: function () {
                 var str;
                 W.init({ waitScreen: true });
@@ -123,8 +94,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 this.discBox.destroy();
             });
         }
-        // Takes settings.CONSENT by default.
+        // Uses settings.CONSENT by default (defined in game.settings.js).
     });
+
 
     stager.extendStep('instructions', {
         // No need to specify the frame, if named after the step id.
@@ -141,60 +113,80 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
+    // SURVEY STAGE.
+    ////////////////////////////////////////////////////////////////////////////
+
+    const formOptions = {
+        orientation: 'V',
+        onclick: function(value, removed, td) {
+            var res, f;
+            if (!removed) {
+                f = node.widgets.last.getVisibleForms()[0];
+                // Autoplay has f undefined.
+                // Some widgets (e.g., Dropdown) do not have isChoiceDone,
+                // they should
+                if (f && f.isChoiceDone && !f.isChoiceDone(true)) return;
+                res = node.widgets.last.next();
+                if (res === false) node.done();
+            }
+        },
+        onchange: function() {
+            setTimeout(function() {
+                var res;
+                res = node.widgets.last.next();
+                if (res === false) node.done();
+            }, 400);
+        }
+    };
+
+    const surveyWidget = {
+        
+        name: 'ChoiceManager',
+        
+        simplify: true,
+        
+        oneByOne: true,
+        
+        doneBtn: true, // or a string, e.g., "Next",
+
+        backBtn: true, // or a string, e.g., "Back",
+        
+        footer: footerCb,
+        
+        panel: false,
+
+        honeypot: true,
+
+        // Or an object containing custom forms to add to the honeypot:
+
+        // {
+        //     forms:[
+        //         { id: 'colorblind', label: 'Are you color blind?',
+        //         placeholder: 'Write yes/no' },
+        //         { id: 'favoritetown', label: 'What is your favorite town?',
+        //         placeholder: 'Type your favorite town' }
+        //     ]
+        // },
+
+        formsOptions: formOptions
+    };
+
+  
     stager.extendStep('survey-demo1', {
         // Make a widget step.
-        widget: {
-            name: 'ChoiceManager',
-            
-            id: 'demo1',
-            
-            mainText: 'Your demographics.',
-            
-            simplify: true,
-            
-            oneByOne: true,
-            
-            doneBtn: "Next",
-            
-            backBtn: "Back",
-            
-            footer: footerCb,
-            
-            panel: false,
-
-            honeypot: {
-                forms:[
-                    { id: 'colorblind', label: 'Are you color blind?',
-                    placeholder: 'Write yes/no' },
-                    { id: 'favoritetown', label: 'What is your favorite town?',
-                    placeholder: 'Type your favorite town' }
-                ]
-            },
-
+        widget: J.merge(surveyWidget, {
             forms: [
                 {
                     id: 'gender',
-                    mainText: 'What is your mother\'s name?',
-                    choices: ['Anna', 'Carla', 'Other'],
+                    mainText: 'What is your gender?',
+                    choices: [ 'Male', 'Female', 'Non-Binary' ],
                     shuffleChoices: false,
-                    onclick: function (value, removed) {
-                        var w;
-                        // Display Other.
-                        w = node.widgets.lastAppended.formsById.othergender;
-                        if ((value === 2) && !removed) w.show();
-                        else w.hide();
-                        // Necessary when the page changed size after
-                        // loading it
-                        W.adjustFrameHeight();
-                    },
-                    preprocess: capitalizeInput
-                },
-                {
-                    name: 'CustomInput',
-                    id: 'othergender',
-                    mainText: 'Please name your gender.',
-                    width: '95%',
-                    hidden: true
+                    other: { width: '95%' },
+                    preprocess: capitalizeInput,
+                    texts: {
+                        other: 'Other',
+                        customInput: 'Please name your gender'
+                    }
                 },
                 {
                     name: 'CustomInput',
@@ -242,29 +234,13 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     width: '95%',
                     requiredChoice: false
                 },
-            ],
-            formsOptions: formOptions
-        }
+            ]
+        })
     });
 
 
     stager.extendStep('survey-demo2', {
-        widget: {
-            name: 'ChoiceManager',
-            id: 'demo2',
-            mainText: 'Your demographics.',
-            simplify: true,
-
-            oneByOne: true,
-            
-            doneBtn: "Next",
-            
-            backBtn: "Back",
-            
-            footer: footerCb,
-            
-            panel: false,
-
+        widget: J.merge(surveyWidget, {
             forms: [
                 {
                     id: 'education',
@@ -305,27 +281,11 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     ]
                 }
             ],
-            formsOptions: formOptions
-        }
+        })
     });
 
     stager.extendStep('survey-finance', {
-        widget: {
-            name: 'ChoiceManager',
-            id: 'demo3',
-            mainText: 'Job, and finances.',
-            simplify: true,
-
-            oneByOne: true,
-            
-            doneBtn: "Next",
-            
-            backBtn: "Back",
-            
-            footer: footerCb,
-            
-            panel: false,
-
+        widget: J.merge(surveyWidget, {
             forms: [
                 {
                     id: 'employment',
@@ -362,7 +322,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         .concat(J.seq(250, 500, 50))
                         .concat(['500+']),
                     shuffleChoices: false,
-                    choicesSetSize: 8
+                    choicesSetSize: 8,
+                    orientation: 'H'
                 },
                 {
                     id: 'studentdebt',
@@ -386,6 +347,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         'Middle',
                         'Upper-Middle', 'Upper', 'Elite'
                     ],
+                    orientation: 'H',
                     items: [
                         {
                             id: 'now',
@@ -402,158 +364,128 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     ],
                     shuffleChoices: false
                 }
-            ],
-            formsOptions: formOptions
-        }
+            ]
+        })
     });
 
+    const ineqWidget = J.merge(surveyWidget, {
+        forms: [
+            {
+                id: 'ineqprob',
+                mainText: 'Do you think inequality is a serious ' +
+                    'problem in America?',
+                choices: [
+                    'Not a problem<br/>at all',
+                    'A small<br/>problem',
+                    'A problem',
+                    'A serious problem',
+                    'A very serious problem'
+                ],
+                choicesSetSize: 7
+            },
+            {
+                name: 'ChoiceTableGroup',
+                id: 'ineq_source_internal',
+                choices: J.seq(1, 7),
+                mainText: 'Express your agreement ' +
+                    'on a scale from 1 to 7, where 1 means ' +
+                    'complete disagreement and 7 complete agreement, ' +
+                    'with the following statements.<br/><br/>' +
+                    'Socio-economic inequality in the US is mainly ' +
+                    'caused by:<br/><br/>' +
+                    'Personal Factors:',
+                items: [
+                    {
+                        id: 'talent',
+                        left: 'Some people are more talented'
+                    },
+                    {
+                        id: 'workhard',
+                        left: 'Some people work harder'
+                    },
+                    {
+                        id: 'easierjobs',
+                        left: 'Some people prefer easier, ' +
+                            'low-paying jobs'
+                    }
+                ]
+            },
+            {
+                name: 'ChoiceTableGroup',
+                id: 'ineq_source_economic',
+                choices: J.seq(1, 7),
+                mainText: 'Economic Factors:',
+                items: [
+                    {
+                        id: 'globalization',
+                        left: 'Globalization has squeezed the salary' +
+                            '<br/>of lower-income families'
+                    },
+                    {
+                        id: 'techchange',
+                        left: 'Technological change has raised<br/> ' +
+                            'the salary of highly-educated workers'
+                    },
+                    {
+                        id: 'finance',
+                        left: 'Salaries of people working in<br/>' +
+                            'financial sector are driving inequality'
+                    }
+                ]
+            },
+            {
+                name: 'ChoiceTableGroup',
+                id: 'ineq_source_political',
+                choices: J.seq(1, 7),
+                mainText: 'Political Factors:',
+                items: [
+                    {
+                        id: 'lobbies',
+                        left: 'Interests lobbies in Washington'
+                    },
+                    {
+                        id: 'minorities',
+                        left: 'Discrimination against some minorities'
+                    },
+                    {
+                        id: 'restricted_edu',
+                        left: 'Restricted access to high-quality ' +
+                            'education'
+                    },
+                    {
+                        id: 'policies',
+                        left: 'Social policies in favor of workers ' +
+                            'and unions<br/>have been removed by ' +
+                            'politicians'
+                    }
+                ]
+            },
+            {
+                name: 'ChoiceTableGroup',
+                id: 'ineq_source_luck',
+                choices: J.seq(1, 7),
+                mainText: 'Luck:',
+                items: [
+                    {
+                        id: 'family',
+                        left: 'Family one is born into'
+                    },
+                    {
+                        id: 'luck',
+                        left: 'Other external events'
+                    }
+                ]
+            }
+        ]
+    });
+    ineqWidget.formsOptions.orientation = 'H';
+
     stager.extendStep('survey-inequality', {
-        widget: {
-            name: 'ChoiceManager',
-            id: 'pol',
-            mainText: 'Your ' +
-                'perception of socio-economic inequality in the US.',
-            simplify: true,
-
-            oneByOne: true,
-            
-            doneBtn: "Next",
-            
-            backBtn: "Back",
-            
-            footer: footerCb,
-            
-            panel: false,
-
-            forms: [
-                {
-                    id: 'ineqprob',
-                    mainText: 'Do you think inequality is a serious ' +
-                        'problem in America?',
-                    choices: [
-                        'Not a problem<br/>at all',
-                        'A small<br/>problem',
-                        'A problem',
-                        'A serious problem',
-                        'A very serious problem'
-                    ],
-                    choicesSetSize: 7
-                },
-                {
-                    name: 'ChoiceTableGroup',
-                    id: 'ineq_source_internal',
-                    choices: J.seq(1, 7),
-                    mainText: 'Express your agreement ' +
-                        'on a scale from 1 to 7, where 1 means ' +
-                        'complete disagreement and 7 complete agreement, ' +
-                        'with the following statements.<br/><br/>' +
-                        'Socio-economic inequality in the US is mainly ' +
-                        'caused by:<br/><br/>' +
-                        'Personal Factors:',
-                    items: [
-                        {
-                            id: 'talent',
-                            left: 'Some people are more talented'
-                        },
-                        {
-                            id: 'workhard',
-                            left: 'Some people work harder'
-                        },
-                        {
-                            id: 'easierjobs',
-                            left: 'Some people prefer easier, ' +
-                                'low-paying jobs'
-                        }
-                    ]
-                },
-                {
-                    name: 'ChoiceTableGroup',
-                    id: 'ineq_source_economic',
-                    choices: J.seq(1, 7),
-                    mainText: 'Economic Factors:',
-                    items: [
-                        {
-                            id: 'globalization',
-                            left: 'Globalization has squeezed the salary' +
-                                '<br/>of lower-income families'
-                        },
-                        {
-                            id: 'techchange',
-                            left: 'Technological change has raised<br/> ' +
-                                'the salary of highly-educated workers'
-                        },
-                        {
-                            id: 'finance',
-                            left: 'Salaries of people working in<br/>' +
-                                'financial sector are driving inequality'
-                        }
-                    ]
-                },
-                {
-                    name: 'ChoiceTableGroup',
-                    id: 'ineq_source_political',
-                    choices: J.seq(1, 7),
-                    mainText: 'Political Factors:',
-                    items: [
-                        {
-                            id: 'lobbies',
-                            left: 'Interests lobbies in Washington'
-                        },
-                        {
-                            id: 'minorities',
-                            left: 'Discrimination against some minorities'
-                        },
-                        {
-                            id: 'restricted_edu',
-                            left: 'Restricted access to high-quality ' +
-                                'education'
-                        },
-                        {
-                            id: 'policies',
-                            left: 'Social policies in favor of workers ' +
-                                'and unions<br/>have been removed by ' +
-                                'politicians'
-                        }
-                    ]
-                },
-                {
-                    name: 'ChoiceTableGroup',
-                    id: 'ineq_source_luck',
-                    choices: J.seq(1, 7),
-                    mainText: 'Luck:',
-                    items: [
-                        {
-                            id: 'family',
-                            left: 'Family one is born into'
-                        },
-                        {
-                            id: 'luck',
-                            left: 'Other external events'
-                        }
-                    ]
-                },
-            ],
-            formsOptions: formOptions
-        }
+        widget: ineqWidget
     });
 
     stager.extendStep('survey-politics', {
-        widget: {
-            name: 'ChoiceManager',
-            id: 'pol2',
-            mainText: 'Political knowledge questions.',
-            simplify: true,
-
-            oneByOne: true,
-            
-            doneBtn: "Next",
-            
-            backBtn: "Back",
-            
-            footer: footerCb,
-            
-            panel: false,
-            
+        widget: J.merge(surveyWidget, {
             forms: [
                 {
                     id: 'speaker',
@@ -565,7 +497,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         'Chuck Schumer',
                         'Paul Ryan',
                         'I don\'t know'
-                    ],
+                    ]
                     // correctChoice: 0
                 },
                 {
@@ -577,7 +509,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '4 years',
                         '6 years',
                         '8 years',
-                        'I don\'t know'
+                        'I don\'t know',
+                        orientation: 'H'
                     ],
                     // correctChoice: 0
                 },
@@ -590,7 +523,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '4 years',
                         '6 years',
                         '8 years',
-                        'I don\'t know'
+                        'I don\'t know',
+                        orientation: 'H'
                     ],
                     // correctChoice: 2
                 },
@@ -620,7 +554,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         'Two-thirds',
                         'Three-fourths',
                         'Three-fifths',
-                        'I don\'t know'
+                        'I don\'t know',
+                        orientation: 'H'
                     ],
                     // correctChoice: 1
                 },
@@ -632,7 +567,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '$7.25',
                         '$10.50',
                         '$12.50',
-                        'I don\'t know'
+                        'I don\'t know',
+                        orientation: 'H'
                     ],
                     // correctChoice: 1
                 },
@@ -645,7 +581,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '6%',
                         '10%',
                         '15%',
-                        'I don\'t know'
+                        'I don\'t know',
+                        orientation: 'H'
                     ],
                     // correctChoice: 1
                 },
@@ -657,15 +594,16 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         'Justin Trudeau',
                         'Angela Merkel',
                         'Boris Johnson',
-                        'I don\'t know'
+                        'I don\'t know',
+                        orientation: 'H'
                     ],
                     // correctChoice: 3
-                },
-
-            ],
-            formsOptions: formOptions
-        }
+                }
+            ]
+        })
     });
+
+    // 
 
     stager.extendStep('group_malleability', {
         widget: {
