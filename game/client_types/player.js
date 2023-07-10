@@ -140,9 +140,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     };
 
     const surveyWidget = {
-        
-        name: 'ChoiceManager',
-        
+                
         simplify: true,
         
         oneByOne: true,
@@ -194,6 +192,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     mainText: 'What is your age?',
                     type: 'int',
                     min: 18,
+                    width: '95%'
                 },
                 {
                     id: 'race',
@@ -509,9 +508,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '4 years',
                         '6 years',
                         '8 years',
-                        'I don\'t know',
-                        orientation: 'H'
+                        'I don\'t know'
                     ],
+                    orientation: 'H'
                     // correctChoice: 0
                 },
                 {
@@ -523,9 +522,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '4 years',
                         '6 years',
                         '8 years',
-                        'I don\'t know',
-                        orientation: 'H'
+                        'I don\'t know'
                     ],
+                    orientation: 'H'
                     // correctChoice: 2
                 },
                 {
@@ -554,9 +553,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         'Two-thirds',
                         'Three-fourths',
                         'Three-fifths',
-                        'I don\'t know',
-                        orientation: 'H'
+                        'I don\'t know'
                     ],
+                    orientation: 'H'
                     // correctChoice: 1
                 },
                 {
@@ -567,9 +566,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '$7.25',
                         '$10.50',
                         '$12.50',
-                        'I don\'t know',
-                        orientation: 'H'
+                        'I don\'t know'
                     ],
+                    orientation: 'H'
                     // correctChoice: 1
                 },
                 {
@@ -581,9 +580,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         '6%',
                         '10%',
                         '15%',
-                        'I don\'t know',
-                        orientation: 'H'
+                        'I don\'t know'
                     ],
+                    orientation: 'H'
                     // correctChoice: 1
                 },
                 {
@@ -594,22 +593,27 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         'Justin Trudeau',
                         'Angela Merkel',
                         'Boris Johnson',
-                        'I don\'t know',
-                        orientation: 'H'
+                        'I don\'t know'
                     ],
+                    orientation: 'H'
                     // correctChoice: 3
                 }
             ]
         })
     });
 
-    // 
+    // SDO and Group Malleability.
 
     stager.extendStep('group_malleability', {
         widget: {
-            name: 'GroupMalleability',
-            title: false,
-            panel: false
+            forms: [ 
+                {
+                    name: 'GroupMalleability',     
+                    title: false,
+                    panel: false
+                }
+            ],
+            doneBtn: true, // or a string, e.g., "Next"
         }
     });
 
@@ -617,22 +621,24 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('sdo', {
         name: 'Perception of Groups',
         widget: {
-            name: 'SDO',
-            title: false,
-            panel: false
+            forms: [ 
+                {
+                    name: 'SDO',     
+                    title: false,
+                    panel: false
+                }
+            ],
+            doneBtn: true, // or a string, e.g., "Next",
         }
     });
 
     stager.extendStep('end', {
         widget: {
             name: 'EndScreen',
-            options: {
-                feedback: true,
-                email: true
-            }
-        },
-        init: function () {
-            node.say('end');
+            askServer: true,
+            feedback: true,
+            email: true
+         
         }
     });
 };
