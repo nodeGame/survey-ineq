@@ -1,0 +1,35 @@
+<!doctype html>
+<title>404</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<style>
+  #container {
+    margin: auto;
+    display: block;
+    position: relative;
+    text-align: center;
+    top: 50%;
+    width: 20%;
+  }
+</style>
+<body>
+  <div id="container">
+    <br><br>
+    Oops! The requested resource cannot be found.
+    <br><br>
+    <a href="#" style="display: none" id="goback">
+      <button class="btn-lg btn-primary">Go back to the survey</button>
+    </a>
+  </div>
+  <script>
+    var o = window.location.origin;
+    var p = window.location.pathname;
+    // Find the second /. 
+    var idx = p.substring(1).indexOf('/');
+    var l = idx !== -1 ? o + p.substring(0, idx+1) : o;
+    var a = document.getElementById('goback');
+    a.href = l;
+    a.style.display = '';
+  </script>
+</body>
