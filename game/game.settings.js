@@ -40,11 +40,10 @@ module.exports = {
         EXP_TIME: '20',
 
         EXP_MONEY: '$' + basePay + ' USD'
-      },
+    },
 
-      BASE_PAY: basePay,
+    BASE_PAY: basePay,
 
-    
     // # Game specific properties
 
     // Number of coins available each round.

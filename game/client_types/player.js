@@ -18,73 +18,40 @@ const J = ngc.JSUS;
 
 module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
 
-
-    const footerCb = function(footer) {
-        var str;
-        str = 'All questions are optional.';
-        str += '<br><div class="progress">';
-        str += '<div id="form-progress" class="progress-bar" '
-        str += 'role="progressbar" style="width:' +
-        (1 / this.forms.length)*100 + '%"></div></div>';
-        footer.innerHTML += str;
-    };
-
-    const initProgressCb = function() {
-        var updateProgress = function() {
-            var w;
-            w = node.widgets.last;
-            W.gid('form-progress').style.width =
-                ((w.oneByOneCounter+1) / w.forms.length)*100 + '%';
-        };
-        node.on('WIDGET_NEXT', updateProgress);
-        node.on('WIDGET_PREV', updateProgress);
-    };
-
-    // Make the player step through the steps without waiting for other players.
-    stager.setDefaultStepRule(ngc.stepRules.SOLO);
-
-    // Define a function for future use.
-    function capitalizeInput(input) {
-        var str;
-        str = input.value;
-        str = str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
-        input.value = str;
-    }
-
-    // Make the player step through the steps without waiting for other players.
-    stager.setDefaultStepRule(ngc.stepRules.SOLO);
-
-    stager.setDefaultProperty('frame', 'survey.htm');
-    stager.setDefaultProperty('init', initProgressCb);
-
-    stager.setOnInit(function () {
-
-        // Initialize the client.
-
-        // Setup page: frame only.
-        W.generateFrame();
-
-        this.discBox = node.widgets.append('DisconnectBox', document.body, {
-            disconnectCb: function () {
-                var str;
-                W.init({ waitScreen: true });
-                str = 'Disconnection detected. Please refresh to reconnect.';
-                node.game.pause(str);
-                alert(str);
-            },
-            connectCb: function () {
-                // If the user refresh the page, this is not called, it
-                // is a normal (re)connect.
-                if (node.game.isPaused()) node.game.resume();
-            }
-        });
-
-        // No need to show the wait for other players screen in a survey.
-        W.init({ waitScreen: false });
-
-        // Additional debug information while developing the game.
-        // this.debugInfo = node.widgets.append('DebugInfo', header)
+    
+    const { surveyWidget, capitalizeInput } = gameRoom.use({
+        initSurvey: {
+            stager: stager
+        }
     });
+    
+    stager.extendStep('instructions', {
+        // No need to speficy the html page, by default is <step id>.htm,
+        // so here it is: instructions.htm (loaded from public/).
+        frame: { 
+            replace: {
+                // coins: settings.CONSENT.EXP_MONEY,
+                time: settings.CONSENT.EXP_TIME
+            }
+        },
+        cb: function () {
+            var s;
+            // Note: we need to specify node.game.settings,
+            // and not simply settings, because this code is
+            // executed on the client.
+            s = node.game.settings;
+            // Replace variable in the instructions.
+            W.setInnerHTML('coins', s.CONSENT.EXP_MONEY);
+
+            // Add the DoneButton widget to go the next step inside the
+            // element with id "container", set the text on the button to
+            // "Next" (default: "Done").
+            node.widgets.add('DoneButton', 'container', { text: 'Next' });
+        },
+        // Custom CSS rules to display the DoneButton centered in the page.
+        css: '#donebutton { display: block; margin: 0 auto; }'
+    });
+
 
     stager.extendStep('consent', {
         donebutton: false,
@@ -97,78 +64,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         // Uses settings.CONSENT by default (defined in game.settings.js).
     });
 
-
-    stager.extendStep('instructions', {
-        // No need to specify the frame, if named after the step id.
-        frame: 'instructions.htm',
-        cb: function () {
-            var s;
-            // Note: we need to specify node.game.settings,
-            // and not simply settings, because this code is
-            // executed on the client.
-            s = node.game.settings;
-            // Replace variables in the instructions.
-            W.setInnerHTML('coins', s.COINS);
-            W.setInnerHTML('time', s.CONSENT.EXP_TIME);
-        }
-    });
-
     // SURVEY STAGE.
     ////////////////////////////////////////////////////////////////////////////
-
-    const formOptions = {
-        orientation: 'V',
-        onclick: function(value, removed, td) {
-            var res, f;
-            if (!removed) {
-                f = node.widgets.last.getVisibleForms()[0];
-                // Autoplay has f undefined.
-                // Some widgets (e.g., Dropdown) do not have isChoiceDone,
-                // they should
-                if (f && f.isChoiceDone && !f.isChoiceDone(true)) return;
-                res = node.widgets.last.next();
-                if (res === false) node.done();
-            }
-        },
-        onchange: function() {
-            setTimeout(function() {
-                var res;
-                res = node.widgets.last.next();
-                if (res === false) node.done();
-            }, 400);
-        }
-    };
-
-    const surveyWidget = {
-                
-        simplify: true,
-        
-        oneByOne: true,
-        
-        doneBtn: true, // or a string, e.g., "Next",
-
-        backBtn: true, // or a string, e.g., "Back",
-        
-        footer: footerCb,
-        
-        panel: false,
-
-        honeypot: true,
-
-        // Or an object containing custom forms to add to the honeypot:
-
-        // {
-        //     forms:[
-        //         { id: 'colorblind', label: 'Are you color blind?',
-        //         placeholder: 'Write yes/no' },
-        //         { id: 'favoritetown', label: 'What is your favorite town?',
-        //         placeholder: 'Type your favorite town' }
-        //     ]
-        // },
-
-        formsOptions: formOptions
-    };
-
   
     stager.extendStep('survey-demo1', {
         // Make a widget step.
@@ -590,7 +487,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     mainText: 'Who is the prime minister of Great Britain?',
                     choices: [
                         'Scott Morrison',
-                        'Justin Trudeau',
+                        'Rishi Sunak',
                         'Angela Merkel',
                         'Boris Johnson',
                         'I don\'t know'

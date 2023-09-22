@@ -13,7 +13,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     stager
         
         .stage("instructions")
-        
+
         .stage("consent")
 
         .stage("survey")
@@ -32,12 +32,11 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     // Notice: here all stages have one step named after the stage.
 
     // Skip one stage.
-    stager.skip("instructions");
-    stager.skip("consent");
+    // stager.skip("consent");
 
-    // Skip multiple stages:
-    // stager.skip([ 'instructions', 'quiz' ])
+    // Skip multiple stages at once:
+    // stager.skip([ 'consent', 'sdo' ])
 
     // Skip a step within a stage:
-    // stager.skip('stageName', 'stepName');
+    // stager.skip('survey', 'survey-finance');
 };
