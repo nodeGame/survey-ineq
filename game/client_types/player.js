@@ -18,7 +18,9 @@ const J = ngc.JSUS;
 
 module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
 
-    
+    // TODO:
+    // const { treatmentName, settings, stager, setup, gameRoom } = conf;
+        
     const { surveyWidget, capitalizeInput } = gameRoom.use({
         initSurvey: {
             stager: stager
@@ -34,6 +36,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 time: settings.CONSENT.EXP_TIME
             }
         },
+        // Custom CSS rules to display the DoneButton centered in the page.
+        css: '#donebutton { display: block; margin: 0 auto; }',
         cb: function () {
             var s;
             // Note: we need to specify node.game.settings,
@@ -47,26 +51,28 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
             // element with id "container", set the text on the button to
             // "Next" (default: "Done").
             node.widgets.add('DoneButton', 'container', { text: 'Next' });
-        },
-        // Custom CSS rules to display the DoneButton centered in the page.
-        css: '#donebutton { display: block; margin: 0 auto; }'
+        }
     });
 
 
     stager.extendStep('consent', {
         donebutton: false,
-        widget: 'Consent',
-        cb: function () {
-            node.on('CONSENT_REJECTING', function () {
-                this.discBox.destroy();
-            });
-        }
+        widget: 'Consent'
         // Uses settings.CONSENT by default (defined in game.settings.js).
     });
 
     // SURVEY STAGE.
     ////////////////////////////////////////////////////////////////////////////
   
+    stager.extendStep('survey-intro-demo', {
+        frame: 'intro.htm',
+        html: `
+            <br>
+            <h2>Let's begin!</h2><br>
+            You will now answer a few questions about yourself.
+            `
+    });
+
     stager.extendStep('survey-demo1', {
         // Make a widget step.
         widget: J.merge(surveyWidget, {
@@ -262,6 +268,16 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 }
             ]
         })
+    });
+
+    
+    stager.extendStep('survey-intro-ineq-pol', {
+        html: `
+            <br>
+            <strong>Good progress!</strong><br><br>
+            You will now answer a few questions about perception of
+            inequality and politics.
+            `
     });
 
     const ineqWidget = J.merge(surveyWidget, {

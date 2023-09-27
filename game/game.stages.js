@@ -17,9 +17,11 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         .stage("consent")
 
         .stage("survey")
+            .step('survey-intro-demo')
             .step("survey-demo1")
             .step("survey-demo2")
             .step("survey-finance")
+            .step('survey-intro-ineq-pol')
             .step("survey-inequality")
             .step("survey-politics")
         
