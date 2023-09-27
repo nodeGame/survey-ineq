@@ -17,19 +17,25 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         .stage("consent")
 
         .stage("survey")
+
             .step('survey-intro-demo')
             .step("survey-demo1")
             .step("survey-demo2")
+            
+            .step('survey-intro-finance')
             .step("survey-finance")
+
             .step('survey-intro-ineq-pol')
             .step("survey-inequality")
             .step("survey-politics")
         
-        .next("sdo")
+        .stage('intro-end')
+
+        .stage("sdo")
         
-        .next("group_malleability")
+        .stage("group_malleability")
         
-        .next("end")
+        .stage("end")
         
     // Notice: here all stages have one step named after the stage.
 
@@ -37,7 +43,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     // stager.skip("consent");
 
     // Skip multiple stages at once:
-    // stager.skip([ 'consent', 'sdo' ])
+    // stager.skip([ 'consent', 'instructions' ])
 
     // Skip a step within a stage:
     // stager.skip('survey', 'survey-finance');

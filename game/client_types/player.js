@@ -67,7 +67,6 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('survey-intro-demo', {
         frame: 'intro.htm',
         html: `
-            <br>
             <h2>Let's begin!</h2><br>
             You will now answer a few questions about yourself.
             `
@@ -145,6 +144,16 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         widget: J.merge(surveyWidget, {
             forms: [
                 {
+                    id: 'intro-demo2',
+                    name: 'ContentBox',
+                    content: `
+                        <h2>You can use a ContentBox widget</h2>
+                        <br>
+                        To add an intro to a new sequence of questions.
+                    `,
+                    hint: 'Press next to continue.'
+                },
+                {
                     id: 'education',
                     mainText: 'What is your highest education level that you have achieved?',
                     choices: [
@@ -184,6 +193,14 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 }
             ],
         })
+    });
+
+    stager.extendStep('survey-intro-finance', {
+        frame: 'intro.htm',
+        html: `
+            <h2>Finance!</h2><br>
+            You will now answer a few questions about your finances.
+            `
     });
 
     stager.extendStep('survey-finance', {
@@ -272,9 +289,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
 
     
     stager.extendStep('survey-intro-ineq-pol', {
+        frame: 'intro.htm',
         html: `
-            <br>
-            <strong>Good progress!</strong><br><br>
+            <h2>Good progress!</h2><br>
             You will now answer a few questions about perception of
             inequality and politics.
             `
@@ -516,6 +533,15 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     });
 
     // SDO and Group Malleability.
+
+    stager.extendStep('intro-end', {
+        frame: 'intro.htm',
+        html: `
+            <h2>Almost there!</h2><br>
+            You will now answer a few more questions about the perceptions of
+            groups.
+            `
+    });
 
     stager.extendStep('group_malleability', {
         widget: {
