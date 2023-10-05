@@ -30,11 +30,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('instructions', {
         // No need to speficy the html page, by default is <step id>.htm,
         // so here it is: instructions.htm (loaded from public/).
-        frame: { 
-            replace: {
-                // coins: settings.CONSENT.EXP_MONEY,
-                time: settings.CONSENT.EXP_TIME
-            }
+        replace: {
+            // coins: settings.CONSENT.EXP_MONEY,
+            time: settings.CONSENT.EXP_TIME          
         },
         // Custom CSS rules to display the DoneButton centered in the page.
         css: '#donebutton { display: block; margin: 0 auto; }',
@@ -504,7 +502,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 {
                     id: 'infRate',
                     mainText: 'Is the national inflation rate as reported' +
-                        ' by the government currently closest to…',
+                        ' by the government currently closest to...',
                     choices: [
                         '1%',
                         '6%',

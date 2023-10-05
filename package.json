@@ -1,13 +1,13 @@
 {
-    "name": "survey",
-    "version": "0.0.1",
-    "description": "A simple survey with focus on inequality.",
+    "name": "survey-ineq",
+    "version": "0.1.0",
+    "description": "A simple nodeGame survey with focus on inequality.",
     "author": "Stefano Balietti <ste@nodegame.org>",
     "license": "MIT/X11",
     "homepage": "http://nodegame.org",
     "card": {
       "description": "A simple survey with focus on inequality",
-      "url": "https://github.com/nodegame/survey",
+      "url": "https://github.com/nodegame/survey-ineq",
       "icon": "content_paste"
     }
 }
